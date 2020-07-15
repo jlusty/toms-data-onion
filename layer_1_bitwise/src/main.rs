@@ -1,3 +1,5 @@
+use layer_0_ascii85::ascii85::parse_file;
+
 fn main() {
-    println!("Hello, world!");
+    println!("{:?}", parse_file("../layer_1_bitwise/layer_1.txt"));
 }

@@ -2,10 +2,10 @@ use std::char;
 use std::error::Error;
 use std::fs;
 
-const PATH_TO_INPUT: &str = "./input.txt";
+const PATH_TO_INPUT: &str = "./layer_0.txt";
 
 fn main() {
-    let input_str = get_file_string();
+    let input_str = get_encoded_text(get_file_string(PATH_TO_INPUT));
 
     let mut output_str = String::new();
 
@@ -48,8 +48,31 @@ fn read_file(filename: String) -> Result<String, Box<dyn Error>> {
     Ok(input)
 }
 
-fn get_file_string() -> String {
-    let input_str = read_file(PATH_TO_INPUT.to_string()).unwrap();
-    let single_line = format!("{}", input_str.replace("\r\n", ""));
+fn get_file_string(path_to_input: &str) -> String {
+    read_file(path_to_input.to_string()).unwrap()
+}
+
+fn get_encoded_text(input_str: String) -> String {
+    let mut string_start = false;
+    let mut string_end = false;
+    let mut start_point: usize = 0;
+    let mut end_point: usize = input_str.len();
+
+    for (i, c) in input_str.chars().enumerate() {
+        if c == '<' {
+            string_start = true;
+        } else if c == '~' && string_start {
+            start_point = i + 1;
+        } else if c == '~' {
+            string_end = true;
+        } else if c == '>' && string_end {
+            end_point = i - 1;
+        } else {
+            string_start = false;
+            string_end = false;
+        }
+    }
+
+    let single_line = format!("{}", &input_str[start_point..end_point].replace("\r\n", ""));
     single_line
 }

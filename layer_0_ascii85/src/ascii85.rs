@@ -1,8 +1,9 @@
 use std::char;
 use std::error::Error;
 use std::fs;
+use std::path::PathBuf;
 
-pub fn parse_file(path_to_input: &str) -> Vec<u32> {
+pub fn parse_file(path_to_input: PathBuf) -> Vec<u32> {
     let input_str = get_encoded_text(get_file_string(path_to_input));
 
     decode_ascii85(input_str)
@@ -45,13 +46,13 @@ fn value_to_ascii(value: u32) -> String {
     output_str
 }
 
-fn read_file(filename: String) -> Result<String, Box<dyn Error>> {
+fn read_file(filename: PathBuf) -> Result<String, Box<dyn Error>> {
     let input = fs::read_to_string(filename)?;
     Ok(input)
 }
 
-fn get_file_string(path_to_input: &str) -> String {
-    read_file(path_to_input.to_string()).unwrap()
+fn get_file_string(path_to_input: PathBuf) -> String {
+    read_file(path_to_input).unwrap()
 }
 
 fn get_encoded_text(input_str: String) -> String {

@@ -2,14 +2,14 @@ use std::char;
 use std::error::Error;
 use std::fs;
 
-pub fn parse_file(path_to_input: &str) -> String {
+pub fn parse_file(path_to_input: &str) -> Vec<u32> {
     let input_str = get_encoded_text(get_file_string(path_to_input));
 
     decode_ascii85(input_str)
 }
 
-pub fn decode_ascii85(input_str: String) -> String {
-    let mut output_str = String::new();
+pub fn decode_ascii85(input_str: String) -> Vec<u32> {
+    let mut output_32_bits = Vec::new();
 
     let mut padded_str = input_str;
     while padded_str.len() % 5 != 0 {
@@ -23,12 +23,12 @@ pub fn decode_ascii85(input_str: String) -> String {
         value = value + (character_value * (85u32).pow(power));
 
         if i % 5 == 4 {
-            output_str = format!("{}{}", output_str, value_to_ascii(value));
+            output_32_bits.push(value);
             value = 0;
         }
     }
 
-    output_str
+    output_32_bits
 }
 
 fn value_to_ascii(value: u32) -> String {
@@ -79,4 +79,12 @@ fn get_encoded_text(input_str: String) -> String {
     input_str[start_point..end_point]
         .lines()
         .collect::<String>()
+}
+
+pub fn bits_32_to_ascii(bits_32: Vec<u32>) -> String {
+    let mut output_str = String::new();
+    for b in bits_32 {
+        output_str = format!("{}{}", output_str, value_to_ascii(b));
+    }
+    output_str
 }

@@ -75,6 +75,8 @@ fn get_encoded_text(input_str: String) -> String {
         }
     }
 
-    let single_line = format!("{}", &input_str[start_point..end_point].replace("\r\n", ""));
-    single_line
+    // Convert to single line
+    input_str[start_point..end_point]
+        .lines()
+        .collect::<String>()
 }

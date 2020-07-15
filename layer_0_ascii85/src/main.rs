@@ -5,8 +5,18 @@ use std::fs;
 const PATH_TO_INPUT: &str = "./layer_0.txt";
 
 fn main() {
-    let input_str = get_encoded_text(get_file_string(PATH_TO_INPUT));
+    let output_str = parse_file(PATH_TO_INPUT);
 
+    fs::write("output.txt", output_str).expect("Unable to write file");
+}
+
+pub fn parse_file(path_to_input: &str) -> String {
+    let input_str = get_encoded_text(get_file_string(path_to_input));
+
+    decode_ascii85(input_str)
+}
+
+pub fn decode_ascii85(input_str: String) -> String {
     let mut output_str = String::new();
 
     let mut padded_str = input_str;
@@ -26,7 +36,7 @@ fn main() {
         }
     }
 
-    fs::write("output.txt", output_str).expect("Unable to write file");
+    output_str
 }
 
 fn value_to_ascii(value: u32) -> String {

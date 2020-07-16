@@ -49,14 +49,15 @@ pub fn decode_ascii85(input_str: String) -> Vec<u8> {
         padded_str.push('u')
     }
 
-    let mut bit_32_value: u32 = 0;
+    let mut bit_32_value: u64 = 0;
     for (i, c) in padded_str.chars().enumerate() {
         let power = (4 - (i % 5)) as u32;
-        let character_value = c as u32 - 33;
-        bit_32_value = bit_32_value + (character_value * (85u32).pow(power));
+        let character_value = c as u64 - 33;
+
+        bit_32_value = bit_32_value + (character_value * (85u64).pow(power));
 
         if i % 5 == 4 {
-            bytes.extend(bit_32_to_bytes(bit_32_value));
+            bytes.extend(bit_32_to_bytes(bit_32_value as u32));
             bit_32_value = 0;
         }
     }

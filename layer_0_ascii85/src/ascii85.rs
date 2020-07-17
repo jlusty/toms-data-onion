@@ -69,12 +69,6 @@ fn bit_32_to_bytes(value: u32) -> Vec<u8> {
     let mut bytes = Vec::new();
     for i in (0..4).rev() {
         let byte_value: u8 = ((value / (256u32).pow(i)) % 256) as u8;
-
-        // byte 3 is end of text character
-        if byte_value == 3 {
-            break;
-        }
-
         bytes.push(byte_value);
     }
     bytes
@@ -83,6 +77,11 @@ fn bit_32_to_bytes(value: u32) -> Vec<u8> {
 pub fn bytes_to_ascii(bytes: Vec<u8>) -> String {
     let mut output_str = String::new();
     for b in bytes {
+        // byte 3 is end of text character
+        if b == 3 {
+            break;
+        }
+
         let ascii_char = char::from_u32(b as u32).unwrap();
         output_str.push(ascii_char);
     }

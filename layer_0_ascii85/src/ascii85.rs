@@ -82,8 +82,12 @@ pub fn bytes_to_ascii(bytes: Vec<u8>) -> String {
             break;
         }
 
-        let ascii_char = char::from_u32(b as u32).unwrap();
+        let ascii_char = byte_to_ascii(b);
         output_str.push(ascii_char);
     }
     output_str
+}
+
+pub fn byte_to_ascii(byte: u8) -> char {
+    char::from_u32(byte as u32).unwrap()
 }

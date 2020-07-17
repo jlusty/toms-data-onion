@@ -18,7 +18,7 @@ fn main() {
             % 2;
 
         if parity == (b & 0b00000001u8) {
-            new_bits.push(b >> 1)
+            new_bits.push(b >> 1);
         }
     }
 

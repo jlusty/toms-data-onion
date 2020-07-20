@@ -6,3 +6,4 @@ edition = "2018"
 
 [dependencies]
 layer_0_ascii85 = { path = "../layer_0_ascii85" }
+openssl = "0.10.30"

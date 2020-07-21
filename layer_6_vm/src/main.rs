@@ -83,7 +83,7 @@ fn main() {
         ptr: 0,
         pc: 0,
     };
-    let memory = bytes;
+    let mut memory = bytes;
     let mut output = Vec::new();
 
     // Loop until HALT
@@ -113,7 +113,7 @@ fn main() {
                     4 => r.d,
                     5 => r.e,
                     6 => r.f,
-                    7 => r.ptr as u8 + r.c,
+                    7 => memory[(r.ptr + r.c as u32) as usize],
                     _ => panic!("Unknown src in MV"),
                 };
                 match dest {
@@ -123,6 +123,7 @@ fn main() {
                     4 => r.d = src_val,
                     5 => r.e = src_val,
                     6 => r.f = src_val,
+                    7 => memory[(r.ptr + r.c as u32) as usize] = src_val,
                     _ => panic!("Unknown dest in MV"),
                 };
             }

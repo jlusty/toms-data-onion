@@ -45,14 +45,12 @@ fn main() {
         // 3. Executes the instruction.
         match instruction {
             i if (i & 0b11000000) == 0b01000000 => {
+                // MV {dest} <- {src}
                 let dest = (i & 0b00111000) >> 3;
                 let src = i & 0b00000111;
-                if src != 0 {
-                    // println!("MV {{dest}} <- {{src}}")
-                }
                 let src_val = match src {
                     0 => {
-                        // println!("MVI {{dest}} <- imm8");
+                        // MVI {dest} <- imm8
                         let src_val = memory[r.pc as usize];
                         r.pc += 1;
                         src_val
@@ -78,14 +76,12 @@ fn main() {
                 };
             }
             i if (i & 0b11000000) == 0b10000000 => {
+                // MV32 {dest} <- {src}
                 let dest = (i & 0b00111000) >> 3;
                 let src = i & 0b00000111;
-                if src != 0 {
-                    // println!("MV32 {{dest}} <- {{src}}");
-                }
                 let src_val = match src {
                     0 => {
-                        // println!("MVI32 {{dest}} <- imm32");
+                        // MVI32 {dest} <- imm32
                         let src_val = get_imm32(&memory, r.pc);
                         r.pc += 4;
                         src_val
@@ -109,16 +105,16 @@ fn main() {
                 };
             }
             0xC2 => {
-                // println!("ADD a <- b");
+                // ADD a <- b
                 r.a = (r.a as u16 + r.b as u16) as u8;
             }
             0xE1 => {
-                // println!("APTR imm8");
+                // APTR imm8
                 r.ptr = r.ptr + (memory[r.pc as usize] as u32);
                 r.pc += 1;
             }
             0xC1 => {
-                // println!("CMP");
+                // CMP
                 if r.a == r.b {
                     r.f = 0;
                 } else {
@@ -126,11 +122,11 @@ fn main() {
                 }
             }
             0x01 => {
-                // println!("HALT");
+                // HALT
                 break;
             }
             0x21 => {
-                // println!("JEZ imm32");
+                // JEZ imm32
                 if r.f == 0 {
                     r.pc = get_imm32(&memory, r.pc);
                 } else {
@@ -138,7 +134,7 @@ fn main() {
                 }
             }
             0x22 => {
-                // println!("JNZ imm32");
+                // JNZ imm32
                 if r.f != 0 {
                     r.pc = get_imm32(&memory, r.pc);
                 } else {
@@ -146,11 +142,11 @@ fn main() {
                 }
             }
             0x02 => {
-                // println!("OUT a");
+                // OUT a
                 output.push(r.a);
             }
             0xC3 => {
-                // println!("SUB a <- b");
+                // SUB a <- b
                 let mut res: i16 = r.a as i16 - r.b as i16;
                 if res < 0 {
                     res += 255;
@@ -158,7 +154,7 @@ fn main() {
                 r.a = res as u8;
             }
             0xC4 => {
-                // println!("XOR a <- b");
+                // XOR a <- b
                 r.a = r.a ^ r.b;
             }
             _ => panic!("Unknown instruction"),
